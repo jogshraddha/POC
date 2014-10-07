@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="demoApp">
+<head>
+    <title>Hello World, AngularJS</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxchart.js"></script>
+    <script type="text/javascript" src="ngjqxsettings.js"></script>
+    <script type="text/javascript" src="app.js">
+    </script>
+</head>
+<body ng-controller="initController">
+    <div id="jqxChart" style="width: 850px; height: 500px" ng-jqwidgets="jqxChart" ng-jqxsettings="{ title: title, description: description, enableAxisTextAnimation: enableAxisTextAnimation,
+        showLegend: showLegend, titlePadding: titlePadding, source: data, categoryAxis: categoryAxis, colorScheme: colorScheme, seriesGroups: seriesGroups }" ng-jqxchart-update="3000"></div>
+</body>
+</html>

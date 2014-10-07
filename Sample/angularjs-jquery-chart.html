@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="demoApp">
+<head>
+    <title>jqxChart Live Update with AngularJS</title>
+    <meta name="keywords" content="Angular, AngularJS, AngularJS directive, AngularJS integration, chart, custom directive, directive, grid, integration, jQuery widgets, jQWidgets, jqxChart, live update," />
+    <link rel="Stylesheet" type="text/css" href="jqwidgets/styles/jqx.base.css" />
+    <link rel="Stylesheet" type="text/css" href="jqwidgets/styles/jqx.energyblue.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxchart.js"></script>
+    <script type="text/javascript" src="ngjqxsettings.js"></script>
+    <script type="text/javascript">
+        var demoApp = angular.module("demoApp", ["ngJqxsettings"])
+
+        demoApp.controller('initController', function ($scope) {
+            console.log("HERE")
+            $scope.data = [
+                { a: 100, b: 200, c: 1 },
+                { a: 120, b: 140, c: 2 },
+                { a: 100, b: 110, c: 3 },
+                { a: 90, b: 135, c: 4 },
+                { a: 70, b: 210, c: 5 },
+                { a: 170, b: 210, c: 5 },
+                { a: 270, b: 350, c: 5 },
+                { a: 710, b: 410, c: 5 },
+                { a: 230, b: 305, c: 5 }
+            ];
+            $scope.title = "Live updates demo";
+            $scope.description = "Data changes every " + $("#jqxChart").attr("ng-jqxchart-update") / 1000 + " seconds";
+            $scope.enableAxisTextAnimation = true;
+            $scope.showLegend = true;
+            $scope.titlePadding = { left: 0, top: 0, right: 0, bottom: 10 };
+            $scope.categoryAxis =
+            {
+                unitInterval: 1,
+                gridLinesInterval: 2,
+                valuesOnTicks: false
+            };
+            $scope.colorScheme = 'scheme06';
+            $scope.seriesGroups =
+                    [
+                        {
+                            type: 'column',
+                            columnsGapPercent: 50,
+                            alignEndPointsWithIntervals: true,
+                            valueAxis:
+                            {
+                                minValue: 0,
+                                maxValue: 1000,
+                                description: 'Index Value'
+                            },
+                            series: [
+                                { dataField: 'a', displayText: 'a', opacity: 1, lineWidth: 1, symbolType: 'circle', fillColorSymbolSelected: 'white', radius: 15 },
+                                { dataField: 'b', displayText: 'b', opacity: 1, lineWidth: 1, symbolType: 'circle', fillColorSymbolSelected: 'white', radius: 15 }
+                            ]
+                        }
+                    ];
+        });
+
+        demoApp.directive('ngJqxchartUpdate', function ($interval, dateFilter) {
+            function link(scope, element, attrs) {
+                var ttimer = setInterval(function () {
+                    var max = 800;
+                    for (var i = 0; i < scope.data.length; i++) {
+                        scope.data[i].a = Math.max(100, (Math.random() * 1000) % max);
+                        scope.data[i].b = Math.max(100, (Math.random() * 1000) % max);
+                    }
+                    $(element[0]).jqxChart('update');
+                }, attrs.ngJqxchartUpdate);
+            };
+
+            return {
+                link: link
+            };
+        });
+    </script>
+</head>
+<body ng-controller="initController">
+<div id="jqxChart" style="width: 850px; height: 500px" ng-jqwidgets="jqxChart" ng-jqxsettings="{ title: title, description: description, enableAxisTextAnimation: enableAxisTextAnimation,
+        showLegend: showLegend, titlePadding: titlePadding, source: data, categoryAxis: categoryAxis, colorScheme: colorScheme, seriesGroups: seriesGroups }"
+     ng-jqxchart-update="3000">
+</div>
+</body>
+</html>
